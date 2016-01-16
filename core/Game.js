@@ -31,43 +31,14 @@ var Game = (function(){
 
     this.start = function(){
         Screenmanager.setInstance('Loading');
+        main();
     };
 
-    // The main game loop
+    // Main loop
     var main = function () {
-        var now = Date.now();
-        var delta = now - then;
-
-        update(delta / 1000);
-        render();
-
-        then = now;
-
-        // Request to do this again ASAP
+        Screenmanager.getCurrentState().update();
+        Screenmanager.getCurrentState().render();
         requestAnimationFrame(main);
-    };
-
-    function animate(myRectangle, canvas, context, startTime) {
-        // update
-        var time = (new Date()).getTime() - startTime;
-
-        var linearSpeed = 100;
-        // pixels / second
-        var newX = linearSpeed * time / 1000;
-
-        if(newX < canvas.width - myRectangle.width - myRectangle.borderWidth / 2) {
-            myRectangle.x = newX;
-        }
-
-        // clear
-        context.clearRect(0, 0, canvas.width, canvas.height);
-
-        drawRectangle(myRectangle, context);
-
-        // request new frame
-        requestAnimFrame(function() {
-            animate(myRectangle, canvas, context, startTime);
-        });
     };
 
 });

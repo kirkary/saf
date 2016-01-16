@@ -14,4 +14,11 @@ Screen.prototype.init = function(scrCanvas){
 Screen.prototype.onEnter = function(){
 };
 Screen.prototype.onLeave = function(){
-    console.log("My name is " + this.name);};
+    console.log("My name is " + this.name);
+};
+Screen.prototype.update = function(){
+};
+
+Screen.prototype.render = function(){
+};
+
