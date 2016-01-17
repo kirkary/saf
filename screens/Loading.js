@@ -2,12 +2,12 @@
  * Created by Kirill on 07.01.16.
  */
 
-var Loading = (function() {
+var Loading = (function () {
 
     this.name = 'Loading';
     var assets = {
-        symbols:[],
-        loaderGraphics:[
+        symbols: [],
+        loaderGraphics: [
             "img/load_shroom1.png",
             "img/load_grass1.png",
             "img/load_tree1.png",
@@ -17,42 +17,55 @@ var Loading = (function() {
     };
     var assetsLoaded = 0;
     var _this = this;
-    var loadingPosX = context.canvas.clientWidth/2;
-    var loadingPosY = context.canvas.clientHeight/2;
+    //Loading images array
+    var loadingImages = [];
+    var finishedLoadingImages = 0;
+    var animatedImagesPerSymbol =0;
+    // Loading text position
+    var loadingPosX = context.canvas.clientWidth / 2;
+    var loadingPosY = context.canvas.clientHeight / 2;
+    var loadingComplete = false;
 
     /**
      * Parse json obtained from the server response
      * @param xhr - XmlHttpRequest
      */
-    function parseJSON (xhr){
+    function parseJSON(xhr) {
         return JSON.parse(xhr.responseText);
     }
+
     /**
      * Loads assets. Used as callback function in request
      * @param xhr - XmlHttpRequest
      */
-    this.loadSymbols = function(xhr){
+    this.loadSymbols = function (xhr) {
         var paths = parseJSON(xhr);
         var symbolsAmount = paths['symbols'].length;
-        for(var i = 0; i <symbolsAmount; i++){
+        animatedImagesPerSymbol = Math.ceil(Math.random() * 4) + 2;
+        for (var i = 0; i < symbolsAmount; i++) {
             var img = new Image();
-            img.onload = function(){
-                    assetsLoaded++;
-                    //Simulate loading delay
-                    setTimeout(function(){
-                        var img = new Image();
-                        for(var k = 0; k <Math.ceil(Math.random() *20) + 5;k++)
-                        {
-                            img.src = assets.loaderGraphics[Math.floor(Math.random() * assets.loaderGraphics.length)];
-                            var scale = Math.random()*1.2 + 0.1;
-                            var width =img.width*scale;
-                            var height = img.height*scale;
-                            context.drawImage(img,(Math.random() * context.canvas.clientWidth),_this.ctx.canvas.clientHeight - height,width,height);
-                        }
-                    },Math.floor((Math.random() * 3000) + 1000));
-                if(assetsLoaded == symbolsAmount)
-                    console.log('Resources are loaded');
-                };
+            img.onload = function () {
+                assetsLoaded++;
+                //Simulate loading delay
+                for (var k = 0; k < animatedImagesPerSymbol; k++) //random numbers for loading animation
+                {
+                    setTimeout(function () {
+                        var image = new Image();
+                        //Make loading image
+                        var scale = Math.random() + 0.3;
+                        image.src = assets.loaderGraphics[Math.floor(Math.random() * assets.loaderGraphics.length)];
+                        image.width *= scale;
+                        image.height *= scale;
+                        var newLoadImg = {
+                            img: image,
+                            posX: (Math.random() * context.canvas.clientWidth),
+                            posY: _this.ctx.canvas.clientHeight
+                        };
+                        loadingImages.push(newLoadImg);
+                        finishedLoadingImages++;
+                    }, Math.floor((Math.random() * 3000) + 1000));
+                }
+            };
             img.src = paths['symbols'][i]['symPath'];
             assets.symbols.push(img);
         }
@@ -63,22 +76,22 @@ var Loading = (function() {
      * @param callback - function to execute in callback
      * @param type - Server response type
      */
-    this.xhrGet = function(reqUri, callback, type){
+    this.xhrGet = function (reqUri, callback, type) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET",reqUri,true);
+        xhr.open("GET", reqUri, true);
 
-        if(type) {
+        if (type) {
             xhr.responseType = type;
         }
 
-        xhr.onload = function (){
-            if(callback){
-                try{
+        xhr.onload = function () {
+            if (callback) {
+                try {
                     callback(xhr)
                 }
-                catch (e){
+                catch (e) {
                     throw 'ERROR: xhrGet request failed' +
-                    '\n'+ reqUri +
+                    '\n' + reqUri +
                     '\nExeption : ' + e +
                     '\nResponse Text : ' + xhr.responseText;
                 }
@@ -87,21 +100,60 @@ var Loading = (function() {
         xhr.send();
     };
 
-    this.update = function (){
-        loadingPosY = context.canvas.clientHeight/2 + Math.sin(Date.now()*0.001)*30;
+    this.update = function (delta) {
+        loadingPosY = context.canvas.clientHeight / 2 + Math.sin(Date.now() * delta) * 20;
+        if (!loadingComplete) {
+            var completedImages = 0; //set counter of animated images to zero
+            for (var i = 0; i < loadingImages.length; i++) {
+                var img = loadingImages[i];
+                if (img.posY > context.canvas.clientHeight - img.img.height) {
+                    img.posY -= 90 * delta;
+                }
+                /*If image became static (finished animation)
+                 * check whether it was the last one to animate
+                 * and every symbol (asset) got animated images
+                 * than complete loading animation
+                 */
+                else {
+                    completedImages++;
+                    if (finishedLoadingImages == completedImages && loadingImages.length == animatedImagesPerSymbol*assetsLoaded)
+                        loadingComplete = true;
+                }
+
+            }
+        }
     };
-    this.render = function (){
-        context.clearRect(0, loadingPosY - 84,context.canvas.clientWidth, 168);
-        context.textAlign="center";
-        context.font="42px Arial";
-        context.fillStyle = '#71bbeb';
-        context.fillText('Loading',loadingPosX, loadingPosY);
+    this.render = function () {
+        if (!loadingComplete) {
+            context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
+            context.textAlign = "center";
+            context.font = "42px Arial";
+            context.fillStyle = '#71bbeb';
+            context.fillText('Loading', loadingPosX, loadingPosY);
+            for (var i = 0; i < loadingImages.length; i++) {
+                var img = loadingImages[i];
+                context.drawImage(img.img, img.posX, img.posY, img.img.width, img.img.height);
+            }
+
+
+        }
+        else {
+            context.clearRect(0, loadingPosY - 84, context.canvas.clientWidth, 168);
+            context.textAlign = "center";
+            context.font = "50px Arial";
+            context.fillStyle = '#71bbeb';
+            context.fillText('Ready to go', loadingPosX, loadingPosY);
+        }
     };
+
+    this.getLoadGraphics = function () {
+        return loadingImages;
+    }
 
 });
 Loading.prototype = Object.create(Screen.prototype);
 
-Loading.prototype.onEnter = function(){
-    this.xhrGet('cfg/config.json',this.loadSymbols,null);
+Loading.prototype.onEnter = function () {
+    this.xhrGet('cfg/config.json', this.loadSymbols, null);
 
 };

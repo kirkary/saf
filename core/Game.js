@@ -5,8 +5,10 @@ var Game = (function(){
         states: {}
     };
     var Screenmanager = new ScreenManager();
-
     var w = window;
+
+    var delta = 1;
+
     requestAnimationFrame =
         w.requestAnimationFrame ||
         w.webkitRequestAnimationFrame ||
@@ -31,14 +33,21 @@ var Game = (function(){
 
     this.start = function(){
         Screenmanager.setInstance('Loading');
-        main();
+        lastTime = Date.now();
+        setInterval(main, 1);
     };
 
     // Main loop
-    var main = function () {
-        Screenmanager.getCurrentState().update();
-        Screenmanager.getCurrentState().render();
-        requestAnimationFrame(main);
-    };
+     var main = function() {
+        var currState = Screenmanager.getCurrentState();
+
+         currState.update(delta/1000);
+         currState.render();
+
+    }
+
+    this.getCurrentState = function(){
+        return Screenmanager.getCurrentState();
+    }
 
 });

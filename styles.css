@@ -5,12 +5,17 @@ html,body{
 }
 
 #main-wrapper{
+    display:table;
     height: 100%;
     width:100%;
 }
 
-#main-wrapper .container{
-    width:416px;
-    height:536px;
-    margin:0 auto;
+#main-wrapper .container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#main-wrapper .container canvas {
+    border: 2px solid rgba(128, 185, 209, 0.4);
 }
