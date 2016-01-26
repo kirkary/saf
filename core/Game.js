@@ -1,6 +1,3 @@
-function timestamp() {
-    return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
-}
 
 var Game = (function(){
     var canvas = null;
@@ -9,10 +6,8 @@ var Game = (function(){
     };
     var Screenmanager = new ScreenManager();
     var w = window;
-    var now,
-        dt   = 0,
-        last = timestamp(),
-        step = 1/60;
+
+    var delta = 1;
 
     requestAnimationFrame =
         w.requestAnimationFrame ||
@@ -38,25 +33,18 @@ var Game = (function(){
 
     this.start = function(){
         Screenmanager.setInstance('Loading');
-        //setInterval(main, 1);
-        requestAnimationFrame(main);
+        lastTime = Date.now();
+        setInterval(main, 1);
     };
 
     // Main loop
      var main = function() {
         var currState = Screenmanager.getCurrentState();
 
-         now   = timestamp();
-         dt = dt + Math.min(1, (now - last) / 1000);
-         while(dt > step) {
-             dt = dt - step;
-             currState.update(dt);
-         }
+         currState.update(delta/1000);
          currState.render();
-         last = now;
 
-         requestAnimationFrame(main);
-    };
+    }
 
     this.getCurrentState = function(){
         return Screenmanager.getCurrentState();

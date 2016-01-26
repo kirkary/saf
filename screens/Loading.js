@@ -52,8 +52,8 @@ var Loading = (function () {
                     setTimeout(function () {
                         var image = new Image();
                         //Make loading image
-                        var scale = Math.random() + 0.3; //Get random scake
-                        image.src = assets.loaderGraphics[Math.floor(Math.random() * assets.loaderGraphics.length)]; //get random  from loading images
+                        var scale = Math.random() + 0.3;
+                        image.src = assets.loaderGraphics[Math.floor(Math.random() * assets.loaderGraphics.length)];
                         image.width *= scale;
                         image.height *= scale;
                         var newLoadImg = {
@@ -63,7 +63,7 @@ var Loading = (function () {
                         };
                         loadingImages.push(newLoadImg);
                         finishedLoadingImages++;
-                    }, Math.floor((Math.random() * 3000) + 1000)); //Simulate delay
+                    }, Math.floor((Math.random() * 3000) + 1000));
                 }
             };
             img.src = paths['symbols'][i]['symPath'];
