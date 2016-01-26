@@ -21,6 +21,7 @@ var Loading = (function () {
     var loadingImages = [];
     var finishedLoadingImages = 0;
     var animatedImagesPerSymbol =0;
+    var loadingImagesSpeed = 120; //speed of loading images vertical "rising"
     // Loading text position
     var loadingPosX = context.canvas.clientWidth / 2;
     var loadingPosY = context.canvas.clientHeight / 2;
@@ -101,13 +102,13 @@ var Loading = (function () {
     };
 
     this.update = function (delta) {
-        loadingPosY = context.canvas.clientHeight / 2 + Math.sin(Date.now() * delta) * 20;
+        loadingPosY = context.canvas.clientHeight / 2 + Math.sin(Date.now()/5 * delta) *20;
         if (!loadingComplete) {
             var completedImages = 0; //set counter of animated images to zero
             for (var i = 0; i < loadingImages.length; i++) {
                 var img = loadingImages[i];
                 if (img.posY > context.canvas.clientHeight - img.img.height) {
-                    img.posY -= 90 * delta;
+                    img.posY -= loadingImagesSpeed * delta;
                 }
                 /*If image became static (finished animation)
                  * check whether it was the last one to animate
