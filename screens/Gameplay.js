@@ -124,8 +124,8 @@ var Gameplay = (function() {
         context.drawImage(bg, 0, 0, bg.width, bg.height);
 
         reelCtx.clearRect(0, 0, reelCtx.canvas.clientWidth, reelCtx.canvas.clientHeight);
-        //reelCtx.fillStyle="#fff";
-        //reelCtx.fillRect(0,0,reelCtx.canvas.clientWidth,reelCtx.canvas.clientHeight);
+        reelCtx.fillStyle="#fff";
+        reelCtx.fillRect(0,0,reelCtx.canvas.clientWidth,reelCtx.canvas.clientHeight);
         for(var i = 0; i < reelArray.length; i++){
             reelCtx.drawImage(reelArray[i].sym, 0,reelArray[i].posY, reelCtx.canvas.clientWidth, reelArray[i].sym.height);
         }
