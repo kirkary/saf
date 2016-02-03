@@ -15,8 +15,8 @@ html,body{
     /*display: table-cell;*/
     /*vertical-align: middle;*/
     margin: 0 auto;
-    height:536px;
-    min-height: 536px;
+    height:535px;
+    min-height: 535px;
     width: 416px;
     min-width: 416px;
 }
@@ -70,15 +70,16 @@ html,body{
     border:0;
     border-radius: 50%;
     overflow:hidden;
-    background: url('img/BTN_Spin_d.png');
+    background-image: url('img/BTN_Spin_d.png');
+    background-size:cover;
     outline:none;
 }
 
 #controls .spinBtn:active, #controls .spinBtn.active:active{
     border:#000 solid 3px;
-    background-position: -3px -3px;
+    /*background-position: -3px -3px;*/
 }
 
 #controls .spinBtn.active{
-    background: url('img/BTN_Spin.png');
+    background-image: url('img/BTN_Spin.png');
 }

@@ -5,6 +5,7 @@
 var Gameplay = (function() {
     this.name = 'Gameplay';
     this.options = null;
+    var _this = this;
     var bg;
     var inited = false;
     var symbols = [];   //array of symbols passed from loading screen
@@ -18,13 +19,16 @@ var Gameplay = (function() {
         dividerOffset, //offset between symbol and divider
         spinning = false, //indicate if reel spins
         reelWellPos = true, //indicate if reel in right position (3 symbols on screen)
-        reelSpeed = 1000,
+        reelSpeed = 2000,
         reelArray = [];     //array of symbols and dividers
     bg = new Image();
     bg.src = 'img/BG.png';
 
     const REEL_TO_CANVAS_W = 0.5; //reelCanvas / mainCanvas ratio
     const VISIBLE_SYM_AMOUNT = 3; //amount of visible symbols on the reel
+    const DEFAULT_REEL_SPEED = 2000;
+    const TOP_BOT_REEL_OFFSET = 10;
+    const BET_LINE_HEIGHT = 18;
 
     var initScr = function(){
         //set reel canvas options
@@ -32,18 +36,21 @@ var Gameplay = (function() {
         reel.height = context.canvas.clientHeight;
 
         //get symbols passed from loading screen
-        while(_options.symbols.length){
-            var num = Math.floor((Math.random() * _options.symbols.length));
-            symbols.push(_options.symbols[num]);
-            _options.symbols.splice(num,1);
-        }
+        symbols = _options.symbols;
+        //while(_options.symbols.length){
+        //    var num = Math.floor((Math.random() * _options.symbols.length));
+        //    symbols.push(_options.symbols[num]);
+        //    _options.symbols.splice(num,1);
+        //}
         //Set spin button
-        spinBtn = document.createElement('button');
+        var spinBtn = document.createElement('button');
         spinBtn.id = 'spin';
         spinBtn.setAttribute('class','ui spinBtn active');
-        document.getElementById('controls').appendChild(spinBtn);
         spinBtn.style.left = 4*(context.canvas.clientWidth/6) + 'px';
         spinBtn.style.top = 2*(context.canvas.clientHeight/5) + 'px';
+        document.getElementById('controls').appendChild(spinBtn);
+        spinBtn.style.width = spinBtn.clientWidth*_this.scrManager.canvasScale + 'px';
+        spinBtn.style.height = spinBtn.clientHeight*_this.scrManager.canvasScale + 'px';
         spinBtn.addEventListener('click', function(){
             if(!spinning)
             {
@@ -60,15 +67,15 @@ var Gameplay = (function() {
         symAmount = symbols.length;
         hiddenSymAmount = symAmount - VISIBLE_SYM_AMOUNT;
         divAmount = symAmount;
-        dividerOffset = (reelCtx.canvas.clientHeight - symbols[0].height * VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1);
-        topPoint = (symbols[0].height+dividerOffset*2+18) * hiddenSymAmount * (-1) - dividerOffset*2 -18;
+        dividerOffset = (reelCtx.canvas.clientHeight - symbols[0].height * VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1) -TOP_BOT_REEL_OFFSET;
+        topPoint = (symbols[0].height+dividerOffset*2+BET_LINE_HEIGHT) * hiddenSymAmount * (-1) - dividerOffset*2 -BET_LINE_HEIGHT;
         var posY = topPoint;
         for(var i = 0; i < symAmount; i++){
             var betLine = new Image();
             betLine.src = 'img/Bet_Linee.png';
             posY+=dividerOffset;
             reelArray.push({sym:betLine,posY:posY});
-            posY+=betLine.height;
+            posY+=BET_LINE_HEIGHT;
             posY+=dividerOffset;
             reelArray.push({sym:symbols[i],posY:posY,typeSym:true});
             posY+=symbols[i].height;
@@ -78,11 +85,11 @@ var Gameplay = (function() {
 
     window.syms = reelArray;
 
-    var spinReel = function(delta){
+    var spinReel = function(delta,speed){
         for (var i = 0; i < reelArray.length; i++) {
-            reelArray[i].posY += delta*reelSpeed;
             if (reelArray[i].posY >= reelCtx.canvas.clientHeight)
                 reelArray[i].posY = topPoint;
+            reelArray[i].posY += delta*speed;
         }
     };
 
@@ -92,6 +99,7 @@ var Gameplay = (function() {
             {
                 var diff = reelArray[i].posY + reelArray[i].sym.height/2 - reelCtx.canvas.clientHeight /2;
                 if(Math.abs(diff) <= 5) {
+                    reelSpeed = DEFAULT_REEL_SPEED;
                     return true;
                 }
             }
@@ -107,12 +115,14 @@ var Gameplay = (function() {
         if(spinning)
         {
             reelWellPos = false;
-            spinReel(delta);
+            spinReel(delta,reelSpeed);
+            if(reelSpeed > 500)
+            reelSpeed-=reelSpeed*delta;
         }
         //if spinning end but reel is not in the right position
         else if(!spinning && !reelWellPos)
         {
-            spinReel(delta);
+            spinReel(delta,reelSpeed/5);
             if(reelIsWellPos())
                 reelWellPos = true;
         }
@@ -120,13 +130,15 @@ var Gameplay = (function() {
     this.render = function ()
     {
         context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
-        context.drawImage(bg, 0, 0, bg.width, bg.height);
+        context.drawImage(bg, 0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
 
         reelCtx.clearRect(0, 0, reelCtx.canvas.clientWidth, reelCtx.canvas.clientHeight);
         //reelCtx.fillStyle="#fff";
         //reelCtx.fillRect(0,0,reelCtx.canvas.clientWidth,reelCtx.canvas.clientHeight);
         for(var i = 0; i < reelArray.length; i++){
             reelCtx.drawImage(reelArray[i].sym, 0,reelArray[i].posY, reelCtx.canvas.clientWidth, reelArray[i].sym.height);
+            //reelCtx.rect(0,reelArray[i].posY, reelArray[i].sym.width, reelArray[i].sym.height);
+            //reelCtx.stroke();
         }
     };
 });

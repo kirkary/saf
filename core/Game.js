@@ -5,6 +5,7 @@ function timestamp() {
 var Game = (function(){
     var canvas = null;
     var options = {
+        canvasScale:1,
         states: {}
     };
     var Screenmanager = new ScreenManager();
@@ -21,16 +22,11 @@ var Game = (function(){
         w.msRequestAnimationFrame ||
         w.mozRequestAnimationFrame;
 
-    this.vendor =
-        (/webkit/i).test(navigator.appVersion) ? '-webkit' :
-            (/firefox/i).test(navigator.userAgent) ? '-moz' :
-                (/msie/i).test(navigator.userAgent) ? 'ms' :
-                    'opera' in window ? '-o' : '';
-
     this.controls = document.getElementById("controls");
 
-    this.init = function(canvasObj){
+    this.init = function(canvasObj,scale){
         canvas = canvasObj;
+        options.canvasScale = scale;
         options.states = {
             Loading : new Loading(),
             Menu : new Menu(),

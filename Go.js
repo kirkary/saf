@@ -9,8 +9,27 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
     container[0].style.height = "100%";
 }
 
-canvas.width = container[0].offsetWidth;
-canvas.height = container[0].offsetHeight;
+var contentWidth = 416;
+var contentHeight = 535;
+var scale = 1
 
-game.init(canvas);
+if(container[0].offsetHeight > container[0].offsetWidth)
+{
+    scale = contentHeight/contentWidth;
+    container[0].style.height = "100%";
+    canvas.height = container[0].offsetHeight;
+    canvas.width =  canvas.height/scale;
+    container[0].style.width = canvas.width +'px';
+}
+else{
+    scale = contentWidth/contentHeight;
+    container[0].style.width = "100%";
+    canvas.width = container[0].offsetWidth;
+    canvas.height =  canvas.width/scale;
+    container[0].style.height = canvas.height +'px';
+}
+
+
+
+game.init(canvas,scale);
 game.start();

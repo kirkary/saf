@@ -1,14 +1,20 @@
 var ScreenManager = (function(){
 
+    this.canvasScale = 1;
     var states = null;
     var currentState = null;
     var canvas = null;
     var _this = this;
+
     this.init = function(options,cnvs) {
         options = options || {};
         currentState = null;
         states = {};
         canvas = cnvs;
+        if(options.canvasScale)
+        {
+            _this.canvasScale = options.canvasScale;
+        }
         if (options.states) {
             states = options.states;
         }
