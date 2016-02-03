@@ -21,7 +21,7 @@ var Gameplay = (function() {
         reelSpeed = 1000,
         reelArray = [];     //array of symbols and dividers
     bg = new Image();
-    bg.src = 'img/bg.png';
+    bg.src = 'img/BG.png';
 
     const REEL_TO_CANVAS_W = 0.5; //reelCanvas / mainCanvas ratio
     const VISIBLE_SYM_AMOUNT = 3; //amount of visible symbols on the reel
