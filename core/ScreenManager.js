@@ -3,7 +3,7 @@ var ScreenManager = (function(){
     var states = null;
     var currentState = null;
     var canvas = null;
-
+    var _this = this;
     this.init = function(options,cnvs) {
         options = options || {};
         currentState = null;
@@ -17,7 +17,7 @@ var ScreenManager = (function(){
         }
         for (st in states)
         {
-            states[st].init(canvas);
+            states[st].init(canvas,_this);
         }
     };
 
@@ -25,12 +25,13 @@ var ScreenManager = (function(){
         states[name] = stateInstance;
     };
 
-    this.setInstance = function (nextState) {
+    this.setInstance = function (nextState, options) {
+        var options = options || {};
         if (currentState) {
             currentState.onLeave();
         }
         currentState = states[nextState];
-        currentState.onEnter();
+        currentState.onEnter(options);
     };
 
     this.getCurrentState = function(){

@@ -27,6 +27,8 @@ var Game = (function(){
                 (/msie/i).test(navigator.userAgent) ? 'ms' :
                     'opera' in window ? '-o' : '';
 
+    this.controls = document.getElementById("controls");
+
     this.init = function(canvasObj){
         canvas = canvasObj;
         options.states = {

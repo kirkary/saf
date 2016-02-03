@@ -26,7 +26,8 @@ var Loading = (function () {
     var loadingPosX = context.canvas.clientWidth / 2;
     var loadingPosY = context.canvas.clientHeight / 2;
     var loadingComplete = false;
-
+    //UI
+    var playBtn = null;
     /**
      * Parse json obtained from the server response
      * @param xhr - XmlHttpRequest
@@ -117,8 +118,23 @@ var Loading = (function () {
                  */
                 else {
                     completedImages++;
-                    if (finishedLoadingImages == completedImages && loadingImages.length == animatedImagesPerSymbol*assetsLoaded)
+                    if (finishedLoadingImages == completedImages && loadingImages.length == animatedImagesPerSymbol*assetsLoaded) {
                         loadingComplete = true;
+                        if(!playBtn){
+                            context.clearRect(0, loadingPosY - 84, context.canvas.clientWidth, 168); // clear loading text
+                            playBtn = document.createElement('button');
+                            playBtn.id = 'play';
+                            var t = document.createTextNode('Play');       // Create a text node
+                            playBtn.appendChild(t);
+                            playBtn.setAttribute('class','ui playBtn');
+                            document.getElementById('controls').appendChild(playBtn);
+                            playBtn.style.left = loadingPosX - playBtn.offsetWidth / 2 + 'px';
+                            //add switch function
+                            playBtn.addEventListener('click', function(){
+                                _this.scrManager.setInstance('Gameplay',assets);
+                            });
+                        }
+                    }
                 }
 
             }
@@ -127,34 +143,28 @@ var Loading = (function () {
     this.render = function () {
         if (!loadingComplete) {
             context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
-            context.textAlign = "center";
-            context.font = "42px Arial";
-            context.fillStyle = '#71bbeb';
+            context.textAlign = 'center';
+            context.font = '42px Arial';
+            context.fillStyle = '#35b9f2';
             context.fillText('Loading', loadingPosX, loadingPosY);
             for (var i = 0; i < loadingImages.length; i++) {
                 var img = loadingImages[i];
                 context.drawImage(img.img, img.posX, img.posY, img.img.width, img.img.height);
             }
-
-
         }
         else {
-            context.clearRect(0, loadingPosY - 84, context.canvas.clientWidth, 168);
-            context.textAlign = "center";
-            context.font = "50px Arial";
-            context.fillStyle = '#71bbeb';
-            context.fillText('Ready to go', loadingPosX, loadingPosY);
+            playBtn.style.top = loadingPosY - playBtn.offsetHeight / 2+'px';
         }
     };
-
-    this.getLoadGraphics = function () {
-        return loadingImages;
-    }
 
 });
 Loading.prototype = Object.create(Screen.prototype);
 
 Loading.prototype.onEnter = function () {
     this.xhrGet('cfg/config.json', this.loadSymbols, null);
+};
 
+Loading.prototype.onLeave = function () {
+    //TODO wrap in clear function
+    document.getElementById('controls').removeChild(document.getElementById('play'));
 };

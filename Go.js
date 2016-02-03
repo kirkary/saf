@@ -9,8 +9,8 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
     container[0].style.height = "100%";
 }
 
-canvas.width = 416;
-canvas.height = 536;
+canvas.width = container[0].offsetWidth;
+canvas.height = container[0].offsetHeight;
 
 game.init(canvas);
 game.start();

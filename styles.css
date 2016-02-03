@@ -5,17 +5,79 @@ html,body{
 }
 
 #main-wrapper{
-    display:table;
+    /*display:table;*/
     height: 100%;
     width:100%;
 }
 
 #main-wrapper .container {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
+    position: relative;
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
+    margin: 0 auto;
+    height:536px;
+    min-height: 536px;
+    width: 416px;
+    min-width: 416px;
 }
 
-#main-wrapper .container canvas {
-    border: 2px solid rgba(128, 185, 209, 0.4);
+#main-wrapper .container #canvas {
+    /*border: 2px solid rgba(128, 185, 209, 0.4);*/
+}
+
+#main-wrapper .container #reel {
+    position: absolute;
+    top: 0;
+    margin-left:5%;
+}
+
+#main-wrapper .container .ui{
+    position: absolute;
+    z-index: 10;
+}
+
+#controls{
+    height: 100%;
+    width: 100%;
+    top: 0;
+}
+
+#controls .playBtn{
+    padding: 10px 30px;
+    background: #35b9f2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #35b9f2 0%, #1da5e0 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #35b9f2 0%,#1da5e0 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #35b9f2 0%,#1da5e0 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#35b9f2', endColorstr='#1da5e0',GradientType=0 ); /* IE6-9 */
+    border: 2px solid #166d91;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    font-size:36px;
+    color: #fdfdfe;
+    outline: none;
+}
+
+#controls .playBtn:active{
+    background: #1da5e0;
+    border-color: #123d52;
+}
+
+#controls .spinBtn{
+    width:103px;
+    height:103px;
+    border:0;
+    border-radius: 50%;
+    overflow:hidden;
+    background: url('img/BTN_Spin_d.png');
+    outline:none;
+}
+
+#controls .spinBtn:active, #controls .spinBtn.active:active{
+    border:#000 solid 3px;
+    background-position: -3px -3px;
+}
+
+#controls .spinBtn.active{
+    background: url('img/BTN_Spin.png');
 }
