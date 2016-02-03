@@ -22,6 +22,7 @@ html,body{
 }
 
 #main-wrapper .container #canvas {
+    position: absolute;
     /*border: 2px solid rgba(128, 185, 209, 0.4);*/
 }
 
