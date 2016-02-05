@@ -20,6 +20,7 @@ var Gameplay = (function() {
         spinning = false, //indicate if reel spins
         reelWellPos = true, //indicate if reel in right position (3 symbols on screen)
         reelSpeed = 2000,
+        chosenSym = '',
         reelArray = [];     //array of symbols and dividers
     bg = new Image();
     bg.src = 'img/BG.png';
@@ -49,13 +50,12 @@ var Gameplay = (function() {
         spinBtn.style.left = 4*(context.canvas.clientWidth/6) + 'px';
         spinBtn.style.top = 2*(context.canvas.clientHeight/5) + 'px';
         document.getElementById('controls').appendChild(spinBtn);
-        spinBtn.style.width = spinBtn.clientWidth*_this.scrManager.canvasScale + 'px';
-        spinBtn.style.height = spinBtn.clientHeight*_this.scrManager.canvasScale + 'px';
         spinBtn.addEventListener('click', function(){
             if(!spinning)
             {
                 spinning = true;
                 spinBtn.setAttribute('class','ui spinBtn');
+                chosenSym = document.getElementById('chooseSym').value;
                 setTimeout(function () {
                     spinning = false;
                     spinBtn.setAttribute('class','ui spinBtn active');
@@ -63,12 +63,26 @@ var Gameplay = (function() {
             }
         });
 
+        //form symbols select
+        var dropdown = document.createElement('select');
+        dropdown.id = 'chooseSym';
+        dropdown.setAttribute('class','ui dropdown');
+        dropdown.style.top = context.canvas.clientHeight/6 + 'px';
+        dropdown.style.left = 3*context.canvas.clientWidth/5 + 'px';
+        for (var i = 0; i<symbols.length; i++){
+            var opt = document.createElement('option');
+            opt.value = symbols[i].name;
+            opt.innerHTML = symbols[i].name;
+            dropdown.appendChild(opt);
+        }
+        document.getElementById('controls').appendChild(dropdown);
+
         //form reel
         symAmount = symbols.length;
         hiddenSymAmount = symAmount - VISIBLE_SYM_AMOUNT;
         divAmount = symAmount;
-        dividerOffset = (reelCtx.canvas.clientHeight - symbols[0].height * VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1) -TOP_BOT_REEL_OFFSET;
-        topPoint = (symbols[0].height+dividerOffset*2+BET_LINE_HEIGHT) * hiddenSymAmount * (-1) - dividerOffset*2 -BET_LINE_HEIGHT;
+        dividerOffset = (reelCtx.canvas.clientHeight - symbols[0].img.height * VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1) -TOP_BOT_REEL_OFFSET;
+        topPoint = (symbols[0].img.height+dividerOffset*2+BET_LINE_HEIGHT) * hiddenSymAmount * (-1) - dividerOffset*2 -BET_LINE_HEIGHT;
         var posY = topPoint;
         for(var i = 0; i < symAmount; i++){
             var betLine = new Image();
@@ -77,8 +91,8 @@ var Gameplay = (function() {
             reelArray.push({sym:betLine,posY:posY});
             posY+=BET_LINE_HEIGHT;
             posY+=dividerOffset;
-            reelArray.push({sym:symbols[i],posY:posY,typeSym:true});
-            posY+=symbols[i].height;
+            reelArray.push({sym:symbols[i].img,name:symbols[i].name,posY:posY,typeSym:true});
+            posY+=symbols[i].img.height;
         }
         window.dividerOffset = dividerOffset;
     };
@@ -100,6 +114,10 @@ var Gameplay = (function() {
                 var diff = reelArray[i].posY + reelArray[i].sym.height/2 - reelCtx.canvas.clientHeight /2;
                 if(Math.abs(diff) <= 5) {
                     reelSpeed = DEFAULT_REEL_SPEED;
+                    if(chosenSym == reelArray[i].name)
+                        console.log('You won! Stopped symbol is: '+reelArray[i].name);
+                    else
+                        console.log('You lose! Stopped symbol is: '+reelArray[i].name);
                     return true;
                 }
             }
@@ -136,7 +154,7 @@ var Gameplay = (function() {
         //reelCtx.fillStyle="#fff";
         //reelCtx.fillRect(0,0,reelCtx.canvas.clientWidth,reelCtx.canvas.clientHeight);
         for(var i = 0; i < reelArray.length; i++){
-            reelCtx.drawImage(reelArray[i].sym, 0,reelArray[i].posY, reelCtx.canvas.clientWidth, reelArray[i].sym.height);
+            reelCtx.drawImage(reelArray[i].sym, 0,reelArray[i].posY, reelCtx.canvas.clientWidth, reelArray[i].sym.height*_this.scrManager.canvasScale);
             //reelCtx.rect(0,reelArray[i].posY, reelArray[i].sym.width, reelArray[i].sym.height);
             //reelCtx.stroke();
         }

@@ -69,7 +69,8 @@ var Loading = (function () {
                 }
             };
             img.src = paths['symbols'][i]['symPath'];
-            assets.symbols.push(img);
+            var name = paths['symbols'][i]['name'];
+            assets.symbols.push({'img':img,'name':name});
         }
     };
     /**

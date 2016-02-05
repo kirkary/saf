@@ -1,11 +1,26 @@
 {"symbols" : [
-    {"symPath":"externalImg/SYM1.png"},
-    {"symPath":"externalImg/SYM3.png"},
-    {"symPath":"externalImg/SYM4.png"},
-    {"symPath":"externalImg/SYM5.png"},
-    {"symPath":"externalImg/SYM6.png"},
-    {"symPath":"externalImg/SYM6.png"},
-    {"symPath":"externalImg/SYM6.png"},
-    {"symPath":"externalImg/SYM6.png"},
-    {"symPath":"externalImg/SYM7.png"}
+    {
+        "symPath":"externalImg/SYM1.png",
+        "name":"Wild"
+    },
+    {
+        "symPath":"externalImg/SYM3.png",
+        "name":"Strawberry"
+    },
+    {
+        "symPath":"externalImg/SYM4.png",
+        "name":"Pineapple"
+    },
+    {
+        "symPath":"externalImg/SYM5.png",
+        "name":"Lemon"
+    },
+    {
+        "symPath":"externalImg/SYM6.png",
+        "name":"Watermelon"
+    },
+    {
+        "symPath":"externalImg/SYM7.png",
+        "name":"Grape"
+    }
 ]}
