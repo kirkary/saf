@@ -50,6 +50,8 @@ var Gameplay = (function() {
         spinBtn.style.left = 4*(context.canvas.clientWidth/6) + 'px';
         spinBtn.style.top = 2*(context.canvas.clientHeight/5) + 'px';
         document.getElementById('controls').appendChild(spinBtn);
+        spinBtn.style.width = spinBtn.offsetWidth*_this.scrManager.canvasScale+ 'px';
+        spinBtn.style.height = spinBtn.offsetHeight*_this.scrManager.canvasScale+ 'px';
         spinBtn.addEventListener('click', function(){
             if(!spinning)
             {
