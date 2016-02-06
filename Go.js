@@ -9,6 +9,10 @@ if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
     container[0].style.maxWidth = "597px";
     container[0].style.maxHeight = "768px";
 }
+else{
+    container[0].style.maxWidth = "100%";
+    container[0].style.maxHeight = "100%";
+}
 
 var contentWidth = 416;
 var contentHeight = 535;
