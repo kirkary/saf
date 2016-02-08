@@ -88,6 +88,26 @@ html,body{
     background-image: url('img/BTN_Spin.png');
 }
 
+#controls .pressMe.spin{
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 4000ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: cubic-bezier(.39,1.63,.67,-0.53);
+    -moz-animation-name: spin;
+    -moz-animation-duration: 4000ms;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: cubic-bezier(.39,1.63,.67,-0.53);
+    -ms-animation-name: spin;
+    -ms-animation-duration: 4000ms;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: cubic-bezier(.39,1.63,.67,-0.53);
+
+    animation-name: spin;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.39,1.63,.67,-0.53);
+}
+
 #controls .dropdown{
     width: 38%;
     height:40px;
@@ -101,4 +121,92 @@ html,body{
 #controls .dropdown option{
     width: 38%;
     background-color: rgb(107, 169, 220);
+}
+
+#controls #messageBox{
+    position: relative;
+    display: none;
+    width: 100%;
+    margin: 0 auto;
+    height: 100%;
+}
+
+#controls #messageBox .text{
+    height: 100%;
+    text-align: center;
+    font-family: 'kenney-future';
+    font-size: 84px;
+    color:#fff;
+    text-shadow: #000 5px 4px 10px;
+}
+
+#controls #messageBox .text.appear{
+    -webkit-animation-name: textAppear;
+    -webkit-animation-duration: 4000ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: cubic-bezier(.23,1,.6,0)
+    -moz-animation-name: textAppear;
+    -moz-animation-duration: 4000ms;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-timing-function: cubic-bezier(.23,1,.6,0);
+    -ms-animation-name: textAppear;
+    -ms-animation-duration: 4000ms;
+    -ms-animation-iteration-count: 1;
+    -ms-animation-timing-function: cubic-bezier(.23,1,.6,0);
+
+    animation-name: textAppear;
+    animation-duration: 4000ms;
+    animation-iteration-count: 1;
+    animation-timing-function: cubic-bezier(.23,1,.6,0);
+}
+
+/*ANIMATIONS*/
+
+@-ms-keyframes spin {
+    from { -ms-transform: rotate(0deg); }
+    to { -ms-transform: rotate(360deg); }
+}
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+@-ms-keyframes textAppear {
+    from { -ms-transform: translateY(-10%); }
+    to { -ms-transform: translateY(100%); }
+}
+@-moz-keyframes textAppear {
+    from { -moz-transform: translateY(-10%); }
+    to { -moz-transform: translateY(100%); }
+}
+@-webkit-keyframes textAppear {
+    from { -webkit-transform: translateY(-10%); }
+    to { -webkit-transform: translateY(100%); }
+}s
+@keyframes textAppear {
+    from {
+        transform:translateY(-10%);
+    }
+    to {
+        transform:translateY(100%);
+    }
+}
+
+/*FONTS*/
+
+@font-face {
+    font-family: kenney-future;
+    src: url(font/kenney-future.square-regular.ttf);
 }

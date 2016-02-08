@@ -13,6 +13,8 @@ if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 else{
     container[0].style.maxWidth = "100%";
     container[0].style.maxHeight = "100%";
+    container[0].style.width = "100%";
+    container[0].style.height = "100%";
 }
 
 var contentWidth = 416;

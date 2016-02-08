@@ -19,20 +19,21 @@ var Gameplay = (function() {
         dividerOffset, //offset between symbol and divider
         spinning = false, //indicate if reel spins
         nextSpinReady = true, //indicate if reel in right position (3 symbols on screen)
-        reelSpeed = 2000,
-        chosenSym = '',
+        reelSpeed = 2000,   //current reel speed
+        chosenSym = '',     //name of chosen symbol
         currReelSym ='',    //current symbols at reel's center
-        reelArray = [],     //array of symbols and dividers
-        bufferArray = [],
+        reelArray = [],     //visible array of symbols and dividers
+        bufferArray = [],   //invisible array of symbols and dividers
         scale = 1,
-        spinBtn = null;
+        spinBtn = null,
+        messageBox = null,
+        messageText;
     bg = new Image();
     bg.src = 'img/BG.png';
 
     const REEL_TO_CANVAS_W = 0.5; //reelCanvas / mainCanvas ratio
     const VISIBLE_SYM_AMOUNT = 3; //amount of visible symbols on the reel
     const DEFAULT_REEL_SPEED = 2000;
-    //const TOP_BOT_REEL_OFFSET = 10;
     const BET_LINE_HEIGHT = 18;
     const MIN_SPIN_TIME = 2000;
     const MAX_SPIN_TIME = 8000;
@@ -83,6 +84,14 @@ var Gameplay = (function() {
             dropdown.appendChild(opt);
         }
         document.getElementById('controls').appendChild(dropdown);
+
+        messageBox = document.createElement('div');
+        messageBox.id = 'messageBox';
+        messageBox.setAttribute('class','ui');
+        messageText = document.createElement('div');
+        messageText.setAttribute('class','text');
+        messageBox.appendChild(messageText);
+        document.getElementById('controls').appendChild(messageBox);
 
         //form reel
         symAmount = symbols.length;
@@ -168,9 +177,29 @@ var Gameplay = (function() {
             if(reelIsWellPos())
             {
                 if(chosenSym == currReelSym)
+                {
                     console.log('You won! Stopped symbol is: '+currReelSym);
+                    messageText.innerHTML ='You \n Win!';
+                    messageBox.style['display']='table';
+                    messageText.setAttribute('class','text appear');
+                    setTimeout(function () {
+                        messageText.innerHTML ='';
+                        messageBox.style['display']='none';
+                        messageText.setAttribute('class','text');
+                    }, 4000);
+                }
                 else
+                {
                     console.log('You lose! Stopped symbol is: '+currReelSym);
+                    messageText.innerHTML ='Try \n again!';
+                    messageBox.style['display']='table';
+                    messageText.setAttribute('class','text appear');
+                    setTimeout(function () {
+                        messageText.innerHTML ='';
+                        messageBox.style['display']='none';
+                        messageText.setAttribute('class','text');
+                    }, 4000);
+                }
                 nextSpinReady = true;
             }
         }
@@ -179,12 +208,9 @@ var Gameplay = (function() {
     {
         context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
         reelCtx.clearRect(0, 0, reelCtx.canvas.clientWidth, reelCtx.canvas.clientHeight);
-
         context.drawImage(bg, 0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
         for(var i = 0; i < reelArray.length; i++){
             reelCtx.drawImage(reelArray[i].sym, 0,reelArray[i].posY, reelCtx.canvas.clientWidth, reelArray[i].sym.height);
-            //reelCtx.rect(0,reelArray[i].posY, reelArray[i].sym.width*_this.scrManager.canvasScale, reelArray[i].sym.height*_this.scrManager.canvasScale);
-            //reelCtx.stroke();
         }
     };
 });
