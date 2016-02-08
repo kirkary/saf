@@ -17,6 +17,8 @@ var Loading = (function () {
     };
     var assetsLoaded = 0;
     var _this = this;
+    var scale = 1;
+    var needScale = false;
     //Loading images array
     var loadingImages = [];
     var finishedLoadingImages = 0;
@@ -102,7 +104,10 @@ var Loading = (function () {
         };
         xhr.send();
     };
-
+    this.resetScale = function(){
+        scale = _this.scrManager.canvasScale;
+        needScale =true;
+    };
     this.update = function (delta) {
         loadingPosY = context.canvas.clientHeight / 2 + Math.sin(Date.now()/5 * delta) *20;
         if (!loadingComplete) {
@@ -122,7 +127,7 @@ var Loading = (function () {
                     if (finishedLoadingImages == completedImages && loadingImages.length == animatedImagesPerSymbol*assetsLoaded) {
                         loadingComplete = true;
                         if(!playBtn){
-                            context.clearRect(0, loadingPosY - 84, context.canvas.clientWidth, 168); // clear loading text
+                            context.clearRect(0, loadingPosY - 104, context.canvas.clientWidth, 208); // clear loading text
                             playBtn = document.createElement('button');
                             playBtn.id = 'play';
                             var t = document.createTextNode('Play');       // Create a text node
@@ -146,13 +151,21 @@ var Loading = (function () {
             context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
             //TODO initialize text params once
             context.textAlign = 'center';
-            context.font = '42px Arial';
-            context.fillStyle = '#35b9f2';
+            context.font = '52px Arial';
+            context.fillStyle = '#fff';
             context.fillText('Loading', loadingPosX, loadingPosY);
             for (var i = 0; i < loadingImages.length; i++) {
                 var img = loadingImages[i];
-                context.drawImage(img.img, img.posX, img.posY, img.img.width, img.img.height);
+                context.drawImage(img.img, img.posX, img.posY, img.img.width*scale, img.img.height*scale);
             }
+        }
+        else if(needScale)
+        {
+            for (var i = 0; i < loadingImages.length; i++) {
+                var img = loadingImages[i];
+                context.drawImage(img.img, img.posX, img.posY, img.img.width*scale, img.img.height*scale);
+            }
+            needScale = false;
         }
         else {
             playBtn.style.top = loadingPosY - playBtn.offsetHeight / 2+'px';
