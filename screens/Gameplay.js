@@ -49,12 +49,12 @@ var Gameplay = (function() {
         reel.height = context.canvas.clientHeight;
         scale = _this.scrManager.canvasScale;
         //get symbols passed from loading screen
-        symbols = _options.symbols;
-        //while(_options.symbols.length){
-        //    var num = Math.floor((Math.random() * _options.symbols.length));
-        //    symbols.push(_options.symbols[num]);
-        //    _options.symbols.splice(num,1);
-        //}
+//        symbols = _options.symbols;
+        while(_options.symbols.length){
+            var num = Math.floor((Math.random() * _options.symbols.length));
+            symbols.push(_options.symbols[num]);
+            _options.symbols.splice(num,1);
+        }
         //Set spin button
         spinBtn = document.createElement('button');
         spinBtn.id = 'spin';

@@ -149,7 +149,6 @@ var Loading = (function () {
     this.render = function () {
         if (!loadingComplete) {
             context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
-            //TODO initialize text params once
             context.textAlign = 'center';
             context.font = '52px Arial';
             context.fillStyle = '#fff';
@@ -180,6 +179,5 @@ Loading.prototype.onEnter = function () {
 };
 
 Loading.prototype.onLeave = function () {
-    //TODO wrap in clear function
     document.getElementById('controls').removeChild(document.getElementById('play'));
 };
