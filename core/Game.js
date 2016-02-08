@@ -29,7 +29,6 @@ var Game = (function(){
         options.canvasScale = scale;
         options.states = {
             Loading : new Loading(),
-            Menu : new Menu(),
             Gameplay : new Gameplay()
         };
         Screenmanager.init(options,canvas);
