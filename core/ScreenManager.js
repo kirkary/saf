@@ -44,4 +44,9 @@ var ScreenManager = (function(){
         return currentState;
     };
 
+    this.setScale = function(scale){
+        _this.canvasScale = scale;
+        currentState.resetScale();
+    }
+
 });

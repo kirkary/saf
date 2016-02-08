@@ -25,7 +25,11 @@ var Gameplay = (function() {
         reelArray = [],     //visible array of symbols and dividers
         bufferArray = [],   //invisible array of symbols and dividers
         scale = 1,
+        initialSymH,
+        initialSymW,
+        needScale = false,
         spinBtn = null,
+        dropdown = null,
         messageBox = null,
         messageText;
     bg = new Image();
@@ -37,6 +41,7 @@ var Gameplay = (function() {
     const BET_LINE_HEIGHT = 18;
     const MIN_SPIN_TIME = 2000;
     const MAX_SPIN_TIME = 8000;
+    const SPIN_BTN_S = 103;   //initial spin button size
 
     var initScr = function(){
         //set reel canvas options
@@ -72,7 +77,7 @@ var Gameplay = (function() {
         });
 
         //form symbols select
-        var dropdown = document.createElement('select');
+        dropdown = document.createElement('select');
         dropdown.id = 'chooseSym';
         dropdown.setAttribute('class','ui dropdown');
         dropdown.style.top = context.canvas.clientHeight/6 + 'px';
@@ -93,16 +98,20 @@ var Gameplay = (function() {
         messageBox.appendChild(messageText);
         document.getElementById('controls').appendChild(messageBox);
 
+        //All symbols have the same height and width - set from first symbol
+        initialSymH = symbols[0].img.height;
+        initialSymW = symbols[0].img.width;
+
         //form reel
         symAmount = symbols.length;
         hiddenSymAmount = symAmount - VISIBLE_SYM_AMOUNT;
         divAmount = symAmount;
-        dividerOffset = (reelCtx.canvas.clientHeight - (symbols[0].img.height*scale + BET_LINE_HEIGHT *scale)* VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1);
+        dividerOffset = (reelCtx.canvas.clientHeight - (initialSymH*scale + BET_LINE_HEIGHT *scale)* VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1);
         topPoint = 0 - (symbols[0].img.height*scale+BET_LINE_HEIGHT*scale+dividerOffset*2);
         var posY = topPoint;
         for(var i = 0; i < symAmount; i++){
-            symbols[i].img.height = symbols[i].img.height*scale; //scale symbols
-            symbols[i].img.width = symbols[i].img.width*scale;
+            symbols[i].img.height = initialSymH*scale; //scale symbols
+            symbols[i].img.width = initialSymW*scale;
             var betLine = new Image();
             betLine.src = 'img/Bet_Linee.png';
             if(i < VISIBLE_SYM_AMOUNT +1)
@@ -158,12 +167,75 @@ var Gameplay = (function() {
         }
     };
 
+    this.resetScale = function(){
+        scale = _this.scrManager.canvasScale;
+        reel.width = context.canvas.clientWidth * REEL_TO_CANVAS_W;
+        reel.height = context.canvas.clientHeight;
+
+        dropdown.style.top = context.canvas.clientHeight/6 + 'px';
+        dropdown.style.left = 3*context.canvas.clientWidth/5 + 'px';
+        spinBtn.style.left = 4*(context.canvas.clientWidth/6) + 'px';
+        spinBtn.style.top = 2*(context.canvas.clientHeight/5) + 'px';
+        spinBtn.style.width = SPIN_BTN_S*scale+ 'px';
+        spinBtn.style.height = SPIN_BTN_S*scale+ 'px';
+
+        symAmount = symbols.length;
+        hiddenSymAmount = symAmount - VISIBLE_SYM_AMOUNT;
+        divAmount = symAmount;
+        dividerOffset = (reelCtx.canvas.clientHeight - (initialSymH*scale + BET_LINE_HEIGHT *scale)* VISIBLE_SYM_AMOUNT) /(VISIBLE_SYM_AMOUNT + 1);
+        topPoint = 0 - (initialSymH*scale+BET_LINE_HEIGHT*scale+dividerOffset*2);
+        if(!spinning && nextSpinReady)
+        {
+            var newReelArray=[];
+            for(var j = 0; j < reelArray.length; j++){
+                if(reelArray[j].typeSym)
+                    newReelArray.push(reelArray[j]);
+            }
+            for(var k = 0; k < bufferArray.length; k++){
+                if(bufferArray[k].typeSym)
+                    newReelArray.push(bufferArray[k]);
+            }
+            reelArray =[];
+            bufferArray = [];
+            var posY = topPoint;
+            for(var i = 0; i < symAmount; i++){
+                newReelArray[i].sym.height = initialSymH*scale; //scale symbols
+                newReelArray[i].sym.width = initialSymW*scale;
+                var betLine = new Image();
+                betLine.src = 'img/Bet_Linee.png';
+                if(i < VISIBLE_SYM_AMOUNT +1)
+                {
+                    reelArray.push({sym:newReelArray[i].sym,name:newReelArray[i].name,posY:posY,typeSym:true});
+                    posY+=newReelArray[i].sym.height;
+                    posY+=dividerOffset;
+                    reelArray.push({sym:betLine,posY:posY});
+                    posY+=BET_LINE_HEIGHT*scale;
+                    posY+=dividerOffset;
+                }
+                else
+                {
+                    bufferArray.push({sym:newReelArray[i].sym,name:newReelArray[i].name,posY:0,typeSym:true});
+                    bufferArray.push({sym:betLine,posY:0});
+                }
+            }
+        }
+        else
+        {
+            needScale = true;
+        }
+    };
+
     this.update = function (delta) {
         if(!inited)
         {
             initScr();
             inited = true;
             return;
+        }
+        if(needScale)
+        {
+            needScale = false;
+            _this.resetScale();
         }
         if(spinning)
         {

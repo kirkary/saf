@@ -59,4 +59,8 @@ var Game = (function(){
         return Screenmanager.getCurrentState();
     }
 
+    this.setScale = function(scale){
+        Screenmanager.setScale(scale);
+    }
+
 });

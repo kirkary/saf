@@ -5,7 +5,7 @@ var context = canvas.getContext('2d');
 var mainWrapper = document.getElementById('main-wrapper');
 var container =document.getElementsByClassName('container');
 
-//TODO refactor whole ratio-scale block
+var resize = function(){
 if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|iemobile|Windows Phone/i.test(navigator.userAgent) ) {
     container[0].style.maxWidth = "597px";
     container[0].style.maxHeight = "768px";
@@ -39,8 +39,13 @@ else{
     container[0].style.height = canvas.height +'px';
 }
 
-if(mainWrapper.offsetHeight > container[0].offsetHeight)
 container[0].style.top = (mainWrapper.offsetHeight - container[0].offsetHeight)/2 + 'px';
+return scale;
+};
 
-game.init(canvas,scale);
+window.onresize = function(){
+        game.setScale(resize());
+};
+
+game.init(canvas,resize());
 game.start();

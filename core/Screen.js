@@ -15,7 +15,7 @@ Screen.prototype.init = function(scrCanvas, scrManager){
     this.scrManager = scrManager;
 };
 Screen.prototype.onEnter = function(options){
-    _options = options || {};
+    options = options || {};
     console.log("On enter " + this.name);
     console.log("Clear rect on enter");
     this.ctx.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
