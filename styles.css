@@ -185,22 +185,22 @@ html,body{
 
 @-ms-keyframes textAppear {
     from { -ms-transform: translateY(0); }
-    to { -ms-transform: translateY(100%); }
+    to { -ms-transform: translateY(90%); }
 }
 @-moz-keyframes textAppear {
     from { -moz-transform: translateY(0); }
-    to { -moz-transform: translateY(100%); }
+    to { -moz-transform: translateY(90%); }
 }
 @-webkit-keyframes textAppear {
     from { -webkit-transform: translateY(0); }
-    to { -webkit-transform: translateY(100%); }
+    to { -webkit-transform: translateY(90%); }
 }s
 @keyframes textAppear {
     from {
         transform:translateY(0);
     }
     to {
-        transform:translateY(100%);
+        transform:translateY(90%);
     }
 }
 
