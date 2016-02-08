@@ -184,20 +184,20 @@ html,body{
 }
 
 @-ms-keyframes textAppear {
-    from { -ms-transform: translateY(-10%); }
+    from { -ms-transform: translateY(0); }
     to { -ms-transform: translateY(100%); }
 }
 @-moz-keyframes textAppear {
-    from { -moz-transform: translateY(-10%); }
+    from { -moz-transform: translateY(0); }
     to { -moz-transform: translateY(100%); }
 }
 @-webkit-keyframes textAppear {
-    from { -webkit-transform: translateY(-10%); }
+    from { -webkit-transform: translateY(0); }
     to { -webkit-transform: translateY(100%); }
 }s
 @keyframes textAppear {
     from {
-        transform:translateY(-10%);
+        transform:translateY(0);
     }
     to {
         transform:translateY(100%);

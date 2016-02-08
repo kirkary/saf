@@ -6,7 +6,7 @@ var mainWrapper = document.getElementById('main-wrapper');
 var container =document.getElementsByClassName('container');
 
 //TODO refactor whole ratio-scale block
-if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|iemobile|Windows Phone|/i.test(navigator.userAgent) ) {
     container[0].style.maxWidth = "597px";
     container[0].style.maxHeight = "768px";
 }
