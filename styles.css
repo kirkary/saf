@@ -76,13 +76,12 @@ html,body{
     border-radius: 50%;
     overflow:hidden;
     background-image: url('img/BTN_Spin_d.png');
-    background-size:cover;
+    background-size: 100% 100%;
     outline:none;
 }
 
 #controls .spinBtn:active, #controls .spinBtn.active:active{
-    border:#000 solid 3px;
-    /*background-position: -3px -3px;*/
+    border: #537C9B solid 3px;
 }
 
 #controls .spinBtn.active{
@@ -95,7 +94,7 @@ html,body{
     background-color: rgba(62, 94, 127, 0.45);
     border-radius: 5px;
     color: #FFFFFE;
-    font-size: 20px;
+    font-size: 24px;
     outline:none;
 }
 
